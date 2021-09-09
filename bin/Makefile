@@ -3,7 +3,7 @@ PROJECT_DIR = `pwd`
 
 INSTALL_DIRS = $(PROJECT_DIR)
 DEST_DIR = /usr/local/bin
-INSTALL_FILES = `find $(INSTALL_DIRS) -executable -type f 2>/dev/null`
+INSTALL_FILES = $(shell find $(INSTALL_DIRS) -executable -type f 2>/dev/null)
 ARCHIVE = $(PROJECT_NAME).tar.gz
 SIG = $(PROJECT_NAME).asc
 
@@ -30,15 +30,22 @@ tag :
 release : $(ARCHIVE) $(SIG) tag
 
 install :
-	@for file in $(INSTALL_FILES); do 
-	@    dest="$(DEST_DIR)/$$(basename "$${file%.*}")"
-	@    if ! [ -e "$$dest" ]; then
-	@       sudo ln -s "$$file" "$$dest"
-	@    fi
-	@done
+	@for file in $(INSTALL_FILES); do \
+	    echo "Linking '$$file'..."; \
+	    dest="$(DEST_DIR)/$$(basename "$${file%.*}")"; \
+	    if ! [ -e "$$dest" ]; then \
+	       sudo ln -s "$$file" "$$dest" && \
+	       echo "Linked: '$$file' --> '$$dest'" >&2 || \
+	       echo "Failed to link '$$file'!" >&2; \
+	    else \
+	        echo "File '$$dest' already exists!" >&2; \
+	    fi; \
+	done
 
 uninstall :
-	@for file in $(INSTALL_FILES); do 
-	@    dest="$(DEST_DIR)/$$(basename "$${file%.*}")"
-	@    sudo rm -f "$dest"
-	@done
+	@for file in $(INSTALL_FILES); do \
+	    dest="$(DEST_DIR)/$$(basename "$${file%.*}")"; \
+	    sudo rm -f "$$dest" && \
+	    echo "Removed '$$dest'" || \
+	    echo "Failed to remove '$$dest'!"; \
+	done
