@@ -45,7 +45,8 @@ install :
 uninstall :
 	@for file in $(INSTALL_FILES); do \
 	    dest="$(DEST_DIR)/$$(basename "$${file%.*}")"; \
+	    echo "Removing '$$dest'..." >&2; \
 	    sudo rm -f "$$dest" && \
-	    echo "Removed '$$dest'" || \
-	    echo "Failed to remove '$$dest'!"; \
+	    echo "Removed '$$dest'" >&2 || \
+	    echo "Failed to remove '$$dest'!" >&2; \
 	done
