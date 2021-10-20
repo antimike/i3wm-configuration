@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export DPI=$(xrdb -query | sed -nE 's/^Xft\.dpi:\s*//p')
+export DPI=$(xrdb -query | grep dpi | cut -f2)
 export HEIGHT=$((18 * DPI / 96))
 
 # Example of setup:
