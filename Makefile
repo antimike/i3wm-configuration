@@ -1,9 +1,8 @@
 STARTUP := systemd
 SCRIPTS := $(shell find ./bin -executable)
+I3_DEST := ${HOME}/.config/i3
 
 wallpaper : $(shell find . -name "*wallpaper*")
-
-dunst : $(shell find . -name "*dunst*")
 
 i3 : $(shell find . -name "*i3*")
 

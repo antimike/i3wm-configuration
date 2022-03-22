@@ -1,0 +1,10 @@
+[Unit]
+Description=Wallpaper manager
+PartOf=graphical-session.target
+
+[Service]
+Environment=WALLPAPER_DIRECTORY=%h/.config/i3/wallpapers
+Environment=WALLPAPER_OUTPUT=%h/.cache/i3/current-wallpaper.png
+ExecStart=/usr/bin/variety
+Type=oneshot
+RemainAfterExit=false
